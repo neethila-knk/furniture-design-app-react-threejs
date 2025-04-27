@@ -16,10 +16,9 @@ const FurnitureLibrary = () => {
     }
   };
 
-  // Filter furniture based on category and search query
   const filteredFurniture = furnitureItems.filter(item => {
     const matchesCategory = selectedCategory === 'all' || item.category === selectedCategory;
-    const matchesSearch = item.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
+    const matchesSearch = item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
                           item.description.toLowerCase().includes(searchQuery.toLowerCase());
     return matchesCategory && matchesSearch;
   });
@@ -37,20 +36,20 @@ const FurnitureLibrary = () => {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Search furniture..."
-                  className="w-64 border border-gray-300 rounded-md pl-10 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  className="w-64 border text-gray-500 border-gray-300 rounded-md pl-10 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
                 <span className="absolute left-3 top-2.5 text-gray-400">🔍</span>
               </div>
             </div>
           </div>
-          
+
           <div className="mb-6">
             <div className="flex flex-wrap gap-2">
               <button
                 onClick={() => setSelectedCategory('all')}
                 className={`px-4 py-2 rounded-md ${
                   selectedCategory === 'all'
-                    ? 'bg-primary-600 text-white'
+                    ? 'bg-blue-600 text-white'
                     : 'bg-gray-100 hover:bg-gray-200 text-gray-800'
                 }`}
               >
@@ -62,7 +61,7 @@ const FurnitureLibrary = () => {
                   onClick={() => setSelectedCategory(category.id)}
                   className={`px-4 py-2 rounded-md ${
                     selectedCategory === category.id
-                      ? 'bg-primary-600 text-white'
+                      ? 'bg-blue-600 text-white'
                       : 'bg-gray-100 hover:bg-gray-200 text-gray-800'
                   }`}
                 >
@@ -71,15 +70,15 @@ const FurnitureLibrary = () => {
               ))}
             </div>
           </div>
-          
+
           {filteredFurniture.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {filteredFurniture.map((furniture) => (
                 <div key={furniture.id} className="border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
                   <div className="h-48 bg-gray-200 flex items-center justify-center">
-                    <div 
-                      className="w-32 h-32" 
-                      style={{ 
+                    <div
+                      className="w-32 h-32"
+                      style={{
                         backgroundColor: furniture.defaultColor,
                         borderRadius: furniture.category === 'chairs' ? '10px 10px 0 0' : '0',
                         display: 'flex',
@@ -88,7 +87,7 @@ const FurnitureLibrary = () => {
                       }}
                     >
                       <span className="text-4xl">
-                        {furniture.category === 'chairs' ? '🪑' : 
+                        {furniture.category === 'chairs' ? '🪑' :
                          furniture.category === 'tables' ? '🪟' :
                          furniture.category === 'sofas' ? '🛋️' :
                          furniture.category === 'cabinets' ? '🗄️' :
@@ -105,7 +104,7 @@ const FurnitureLibrary = () => {
                       </div>
                       <button
                         onClick={() => handleAddFurniture(furniture.id)}
-                        className="px-3 py-1 bg-primary-600 text-white rounded-md hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500"
+                        className="px-3 py-1 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
                       >
                         Add to Design
                       </button>
@@ -132,7 +131,7 @@ const FurnitureLibrary = () => {
                   setSelectedCategory('all');
                   setSearchQuery('');
                 }}
-                className="px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700"
+                className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
               >
                 Reset Filters
               </button>

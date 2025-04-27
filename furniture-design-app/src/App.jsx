@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { DesignProvider } from './contexts/DesignContext';
+import { initializeDesigns } from './models/designData';
 
 // Components
 import Login from './components/Auth/Login';
@@ -15,6 +16,7 @@ import ColorPicker from './components/Customization/ColorPicker';
 import ShadingControls from './components/Customization/ShadingControls';
 import ScalingControls from './components/Customization/ScalingControls';
 import SavedDesigns from './components/Management/SavedDesigns';
+import CustomizationTools from './components/Customization/CustomizationTools';
 
 // Utility component for protected routes
 const ProtectedRoute = ({ children }) => {
@@ -40,17 +42,11 @@ const ProtectedRoute = ({ children }) => {
 function App() {
   // Initialize the design data in localStorage
   React.useEffect(() => {
-    const initializeDesigns = () => {
-      try {
-        // Load the models
-        const { initializeDesigns } = require('./models/designData');
-        initializeDesigns();
-      } catch (error) {
-        console.error('Error initializing designs:', error);
-      }
-    };
-    
-    initializeDesigns();
+    try {
+      initializeDesigns();  // ✅ directly call
+    } catch (error) {
+      console.error('Error initializing designs:', error);
+    }
   }, []);
   
   return (
@@ -104,56 +100,11 @@ function App() {
                 </ProtectedRoute>
               }
             />
-            
             <Route
               path="/customization"
               element={
                 <ProtectedRoute>
-                  <div className="flex flex-col h-full">
-                    <div className="p-4 bg-white shadow-sm">
-                      <h1 className="text-xl font-semibold text-gray-800">Customization Tools</h1>
-                    </div>
-                    <div className="flex-1 p-4 grid grid-cols-1 md:grid-cols-3 gap-4">
-                      <div className="bg-white p-4 rounded-lg shadow-md flex flex-col">
-                        <h2 className="text-lg font-medium text-gray-900 mb-2">Color Customization</h2>
-                        <p className="text-sm text-gray-600 mb-4">
-                          Change colors of furniture items or room elements.
-                        </p>
-                        <button
-                          onClick={() => window.location.href = '/customization/color'}
-                          className="mt-auto bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-md"
-                        >
-                          Open Color Picker
-                        </button>
-                      </div>
-                      
-                      <div className="bg-white p-4 rounded-lg shadow-md flex flex-col">
-                        <h2 className="text-lg font-medium text-gray-900 mb-2">Shading Controls</h2>
-                        <p className="text-sm text-gray-600 mb-4">
-                          Adjust light and shadow effects for realistic appearance.
-                        </p>
-                        <button
-                          onClick={() => window.location.href = '/customization/shading'}
-                          className="mt-auto bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-md"
-                        >
-                          Open Shading Controls
-                        </button>
-                      </div>
-                      
-                      <div className="bg-white p-4 rounded-lg shadow-md flex flex-col">
-                        <h2 className="text-lg font-medium text-gray-900 mb-2">Scaling Controls</h2>
-                        <p className="text-sm text-gray-600 mb-4">
-                          Resize furniture items to fit perfectly in your room.
-                        </p>
-                        <button
-                          onClick={() => window.location.href = '/customization/scaling'}
-                          className="mt-auto bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-md"
-                        >
-                          Open Scaling Controls
-                        </button>
-                      </div>
-                    </div>
-                  </div>
+                  <CustomizationTools/>
                 </ProtectedRoute>
               }
             />

@@ -17,7 +17,7 @@ export const furnitureItems = [
     dimensions: { width: 45, depth: 50, height: 90 }, // in cm
     defaultColor: '#8B4513',
     price: 149.99,
-    model: 'chair', // Used for 3D model reference
+    modelUrl: '/models/dining_chair.glb',     // ← added GLB path
     thumbnail: '/chair-1-thumb.jpg',
     materials: ['Wood', 'Fabric']
   },
@@ -29,7 +29,7 @@ export const furnitureItems = [
     dimensions: { width: 60, depth: 65, height: 110 },
     defaultColor: '#000000',
     price: 249.99,
-    model: 'office_chair',
+    modelUrl: '/models/office_chair.glb', // Make sure this matches your actual file name exactly
     thumbnail: '/chair-2-thumb.jpg',
     materials: ['Metal', 'Mesh', 'Plastic']
   },
@@ -41,7 +41,8 @@ export const furnitureItems = [
     dimensions: { width: 70, depth: 80, height: 85 },
     defaultColor: '#D2B48C',
     price: 349.99,
-    model: 'lounge_chair',
+    modelScale: 1.3,  
+    modelUrl: '/models/lounge_chair.glb', // ← added GLB
     thumbnail: '/chair-3-thumb.jpg',
     materials: ['Wood', 'Leather']
   },
@@ -49,13 +50,13 @@ export const furnitureItems = [
   // Tables
   {
     id: 'table-1',
-    name: 'Dining Table',
+    name: 'Dining Table Set',
     category: 'tables',
     description: 'Large dining table for family meals',
     dimensions: { width: 180, depth: 90, height: 75 },
     defaultColor: '#8B4513',
     price: 599.99,
-    model: 'dining_table',
+    modelUrl: '/models/simple_dining_table.glb', // ← added GLB
     thumbnail: '/table-1-thumb.jpg',
     materials: ['Wood', 'Metal']
   },
@@ -67,21 +68,9 @@ export const furnitureItems = [
     dimensions: { width: 120, depth: 60, height: 45 },
     defaultColor: '#5C4033',
     price: 299.99,
-    model: 'coffee_table',
+    modelUrl: '/models/coffee_table.glb',
     thumbnail: '/table-2-thumb.jpg',
     materials: ['Wood', 'Glass']
-  },
-  {
-    id: 'table-3',
-    name: 'Side Table',
-    category: 'tables',
-    description: 'Compact side table for living room',
-    dimensions: { width: 45, depth: 45, height: 55 },
-    defaultColor: '#A0522D',
-    price: 149.99,
-    model: 'side_table',
-    thumbnail: '/table-3-thumb.jpg',
-    materials: ['Wood', 'Metal']
   },
   
   // Sofas
@@ -93,23 +82,11 @@ export const furnitureItems = [
     dimensions: { width: 220, depth: 95, height: 85 },
     defaultColor: '#808080',
     price: 999.99,
-    model: 'sofa_3',
+    modelUrl: '/models/3_seater.glb',
     thumbnail: '/sofa-1-thumb.jpg',
     materials: ['Fabric', 'Wood', 'Foam']
   },
-  {
-    id: 'sofa-2',
-    name: 'Loveseat',
-    category: 'sofas',
-    description: 'Cozy 2-seater sofa',
-    dimensions: { width: 160, depth: 95, height: 85 },
-    defaultColor: '#696969',
-    price: 799.99,
-    model: 'sofa_2',
-    thumbnail: '/sofa-2-thumb.jpg',
-    materials: ['Fabric', 'Wood', 'Foam']
-  },
-  
+
   // Cabinets
   {
     id: 'cabinet-1',
@@ -119,7 +96,7 @@ export const furnitureItems = [
     dimensions: { width: 80, depth: 40, height: 200 },
     defaultColor: '#8B4513',
     price: 349.99,
-    model: 'bookshelf',
+    modelUrl: '/models/bookshelf.glb',
     thumbnail: '/cabinet-1-thumb.jpg',
     materials: ['Wood', 'Metal']
   },
@@ -131,7 +108,7 @@ export const furnitureItems = [
     dimensions: { width: 160, depth: 45, height: 55 },
     defaultColor: '#5C4033',
     price: 249.99,
-    model: 'tv_stand',
+    modelUrl: '/models/tv_stand.glb',
     thumbnail: '/cabinet-2-thumb.jpg',
     materials: ['Wood', 'Glass', 'Metal']
   },
@@ -145,7 +122,7 @@ export const furnitureItems = [
     dimensions: { width: 160, depth: 210, height: 45 },
     defaultColor: '#8B4513',
     price: 899.99,
-    model: 'queen_bed',
+    modelUrl: '/models/bed.glb',
     thumbnail: '/bed-1-thumb.jpg',
     materials: ['Wood']
   }
