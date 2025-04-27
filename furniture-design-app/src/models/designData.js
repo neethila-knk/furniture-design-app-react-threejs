@@ -1,3 +1,6 @@
+// models/designData.js - FIXED VERSION
+// Added explicit handling for name updates
+
 // Sample saved designs data
 export const sampleDesigns = [
   {
@@ -132,11 +135,17 @@ export const sampleDesigns = [
 // Local storage functions to simulate backend operations
 const STORAGE_KEY = 'furniture_designs';
 
+// Helper function to log operations for debugging
+const logOperation = (operation, data) => {
+  console.log(`[DesignData] ${operation}:`, data);
+};
+
 // Initialize local storage with sample designs if empty
 export function initializeDesigns() {
   const existingDesigns = localStorage.getItem(STORAGE_KEY);
   if (!existingDesigns) {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(sampleDesigns));
+    logOperation('Initialized designs', sampleDesigns);
   }
 }
 
@@ -160,6 +169,8 @@ export function getDesignById(designId) {
 
 // Save a new design
 export function saveDesign(design) {
+  logOperation('Saving new design', design);
+  
   const designs = getAllDesigns();
   const newDesign = {
     ...design,
@@ -168,6 +179,13 @@ export function saveDesign(design) {
     updatedAt: new Date().toISOString()
   };
   
+  // Ensure a valid name is set
+  if (!newDesign.name || newDesign.name.trim() === '') {
+    newDesign.name = 'Untitled Design';
+  }
+  
+  logOperation('New design to save', newDesign);
+  
   designs.push(newDesign);
   localStorage.setItem(STORAGE_KEY, JSON.stringify(designs));
   return newDesign;
@@ -175,28 +193,106 @@ export function saveDesign(design) {
 
 // Update an existing design
 export function updateDesign(designId, updatedDesign) {
+  logOperation('Updating design', { designId, updatedDesign });
+  
   const designs = getAllDesigns();
   const index = designs.findIndex(design => design.id === designId);
   
   if (index !== -1) {
-    designs[index] = {
+    // Create a new object for the updated design
+    const updatedDesignObject = {
       ...designs[index],
-      ...updatedDesign,
       updatedAt: new Date().toISOString()
     };
     
+    // Explicitly handle the name property to ensure it's preserved
+    if (updatedDesign.name !== undefined) {
+      updatedDesignObject.name = updatedDesign.name;
+      logOperation('Updating name to', updatedDesign.name);
+    }
+    
+    // Handle other properties
+    if (updatedDesign.room) {
+      updatedDesignObject.room = {
+        ...updatedDesignObject.room,
+        ...updatedDesign.room
+      };
+    }
+    
+    if (updatedDesign.furniture) {
+      updatedDesignObject.furniture = updatedDesign.furniture;
+    }
+    
+    if (updatedDesign.shadingEnabled !== undefined) {
+      updatedDesignObject.shadingEnabled = updatedDesign.shadingEnabled;
+    }
+    
+    if (updatedDesign.globalShading !== undefined) {
+      updatedDesignObject.globalShading = updatedDesign.globalShading;
+    }
+    
+    if (updatedDesign.customShading) {
+      updatedDesignObject.customShading = updatedDesign.customShading;
+    }
+    
+    if (updatedDesign.createdBy) {
+      updatedDesignObject.createdBy = updatedDesign.createdBy;
+    }
+    
+    designs[index] = updatedDesignObject;
     localStorage.setItem(STORAGE_KEY, JSON.stringify(designs));
-    return designs[index];
+    
+    logOperation('Updated design', updatedDesignObject);
+    return updatedDesignObject;
   }
   
+  logOperation('Design not found for update', designId);
+  return null;
+}
+
+// Rename a design (dedicated function for renaming)
+export function renameDesign(designId, newName) {
+  logOperation('Renaming design', { designId, newName });
+  
+  if (!newName || newName.trim() === '') {
+    logOperation('Invalid name for rename', newName);
+    return null;
+  }
+  
+  const designs = getAllDesigns();
+  const index = designs.findIndex(design => design.id === designId);
+  
+  if (index !== -1) {
+    const updatedDesign = {
+      ...designs[index],
+      name: newName.trim(),
+      updatedAt: new Date().toISOString()
+    };
+    
+    designs[index] = updatedDesign;
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(designs));
+    
+    logOperation('Design renamed', updatedDesign);
+    return updatedDesign;
+  }
+  
+  logOperation('Design not found for rename', designId);
   return null;
 }
 
 // Delete a design
 export function deleteDesign(designId) {
+  logOperation('Deleting design', designId);
+  
   const designs = getAllDesigns();
   const updatedDesigns = designs.filter(design => design.id !== designId);
   
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedDesigns));
-  return true;
+  if (updatedDesigns.length < designs.length) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedDesigns));
+    logOperation('Design deleted', designId);
+    return true;
+  }
+  
+  logOperation('Design not found for deletion', designId);
+  return false;
 }

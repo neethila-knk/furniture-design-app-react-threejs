@@ -118,7 +118,7 @@ const ColorPicker = () => {
                     type="text"
                     value={selectedColor}
                     onChange={(e) => setSelectedColor(e.target.value)}
-                    className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500"
+                    className="text-gray-500 w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     placeholder="#RRGGBB"
                   />
                 </div>
@@ -135,7 +135,7 @@ const ColorPicker = () => {
                       value="selected"
                       checked={applyTo === 'selected'}
                       onChange={() => setApplyTo('selected')}
-                      className="h-4 w-4 text-primary-600 focus:ring-primary-500"
+                      className="h-4 w-4 text-blue-600 focus:ring-blue-500"
                       disabled={!selectedFurniture}
                     />
                     <label htmlFor="applyToSelected" className="ml-2 block text-gray-900">
@@ -153,7 +153,7 @@ const ColorPicker = () => {
                       value="all"
                       checked={applyTo === 'all'}
                       onChange={() => setApplyTo('all')}
-                      className="h-4 w-4 text-primary-600 focus:ring-primary-500"
+                      className="h-4 w-4 text-blue-600 focus:ring-blue-500"
                       disabled={currentDesign.furniture.length === 0}
                     />
                     <label htmlFor="applyToAll" className="ml-2 block text-gray-900">
@@ -171,7 +171,7 @@ const ColorPicker = () => {
                       value="room"
                       checked={applyTo === 'room'}
                       onChange={() => setApplyTo('room')}
-                      className="h-4 w-4 text-primary-600 focus:ring-primary-500"
+                      className="h-4 w-4 text-blue-600 focus:ring-blue-500"
                     />
                     <label htmlFor="applyToRoom" className="ml-2 block text-gray-900">
                       Room Elements
@@ -195,7 +195,7 @@ const ColorPicker = () => {
                           setRoomPart('wall');
                           setSelectedColor(currentDesign.room.wallColor);
                         }}
-                        className="h-4 w-4 text-primary-600 focus:ring-primary-500"
+                        className="h-4 w-4 text-blue-600 focus:ring-blue-500"
                       />
                       <label htmlFor="roomPartWall" className="ml-2 block text-gray-900">
                         Walls
@@ -212,7 +212,7 @@ const ColorPicker = () => {
                           setRoomPart('floor');
                           setSelectedColor(currentDesign.room.floorColor);
                         }}
-                        className="h-4 w-4 text-primary-600 focus:ring-primary-500"
+                        className="h-4 w-4 text-blue-600 focus:ring-blue-500"
                       />
                       <label htmlFor="roomPartFloor" className="ml-2 block text-gray-900">
                         Floor
@@ -229,7 +229,7 @@ const ColorPicker = () => {
                           setRoomPart('accent');
                           setSelectedColor(currentDesign.room.accentColor);
                         }}
-                        className="h-4 w-4 text-primary-600 focus:ring-primary-500"
+                        className="h-4 w-4 text-blue-600 focus:ring-blue-500"
                       />
                       <label htmlFor="roomPartAccent" className="ml-2 block text-gray-900">
                         Accent
@@ -267,21 +267,21 @@ const ColorPicker = () => {
                       className="w-6 h-6 rounded-full mr-2"
                       style={{ backgroundColor: currentDesign.room.wallColor }}
                     ></div>
-                    <span className="text-sm">Wall: {currentDesign.room.wallColor}</span>
+                    <span className="text-sm text-gray-500">Wall: {currentDesign.room.wallColor}</span>
                   </div>
                   <div className="flex items-center">
                     <div
                       className="w-6 h-6 rounded-full mr-2"
                       style={{ backgroundColor: currentDesign.room.floorColor }}
                     ></div>
-                    <span className="text-sm">Floor: {currentDesign.room.floorColor}</span>
+                    <span className="text-sm  text-gray-500">Floor: {currentDesign.room.floorColor}</span>
                   </div>
                   <div className="flex items-center">
                     <div
                       className="w-6 h-6 rounded-full mr-2"
                       style={{ backgroundColor: currentDesign.room.accentColor }}
                     ></div>
-                    <span className="text-sm">Accent: {currentDesign.room.accentColor}</span>
+                    <span className="text-sm  text-gray-500">Accent: {currentDesign.room.accentColor}</span>
                   </div>
                   
                   {selectedFurniture && (
@@ -291,7 +291,7 @@ const ColorPicker = () => {
                           className="w-6 h-6 rounded-full mr-2"
                           style={{ backgroundColor: selectedFurniture.color || getFurnitureById(selectedFurniture.id)?.defaultColor }}
                         ></div>
-                        <span className="text-sm">
+                        <span className="text-sm  text-gray-500">
                           Selected Furniture: {selectedFurniture.color || getFurnitureById(selectedFurniture.id)?.defaultColor}
                         </span>
                       </div>
@@ -305,7 +305,7 @@ const ColorPicker = () => {
           <div className="mt-8 flex justify-end">
             <button
               onClick={handleApplyColor}
-              className="bg-primary-600 hover:bg-primary-700 text-white px-6 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+              className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
             >
               Apply Color
             </button>
