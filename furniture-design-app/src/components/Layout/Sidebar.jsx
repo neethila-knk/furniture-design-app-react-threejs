@@ -157,15 +157,7 @@ const Sidebar = () => {
               </Link>
             </div>
 
-            <div>
-              <Link
-                to="/customization"
-                className="block px-4 py-2 hover:bg-gray-700 rounded"
-                onClick={() => setSidebarOpen(false)}
-              >
-                Customization
-              </Link>
-            </div>
+            
 
             <div>
               <Link

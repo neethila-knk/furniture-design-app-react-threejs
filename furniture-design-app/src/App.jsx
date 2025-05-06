@@ -12,11 +12,8 @@ import Dashboard from './components/Dashboard/Dashboard';
 import RoomSetup from './components/Room/RoomSetup';
 import FurnitureLibrary from './components/Furniture/FurnitureLibrary';
 import DesignCreator from './components/Design/DesignCreator';
-import ColorPicker from './components/Customization/ColorPicker';
-import ShadingControls from './components/Customization/ShadingControls';
-import ScalingControls from './components/Customization/ScalingControls';
 import SavedDesigns from './components/Management/SavedDesigns';
-import CustomizationTools from './components/Customization/CustomizationTools';
+
 
 // Utility component for protected routes
 const ProtectedRoute = ({ children }) => {
@@ -100,41 +97,7 @@ function App() {
                 </ProtectedRoute>
               }
             />
-            <Route
-              path="/customization"
-              element={
-                <ProtectedRoute>
-                  <CustomizationTools/>
-                </ProtectedRoute>
-              }
-            />
-            
-            <Route
-              path="/customization/color"
-              element={
-                <ProtectedRoute>
-                  <ColorPicker />
-                </ProtectedRoute>
-              }
-            />
-            
-            <Route
-              path="/customization/shading"
-              element={
-                <ProtectedRoute>
-                  <ShadingControls />
-                </ProtectedRoute>
-              }
-            />
-            
-            <Route
-              path="/customization/scaling"
-              element={
-                <ProtectedRoute>
-                  <ScalingControls />
-                </ProtectedRoute>
-              }
-            />
+           
             
             <Route
               path="/saved-designs"
