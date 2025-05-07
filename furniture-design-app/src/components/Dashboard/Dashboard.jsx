@@ -99,7 +99,7 @@ const Dashboard = () => {
           <h2 className="text-xl font-semibold text-gray-800 mb-4">
             Quick Actions
           </h2>
-          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
             {/* … unchanged links … */}
             <Link
               to="/room-setup"
@@ -132,17 +132,6 @@ const Dashboard = () => {
               </div>
               <span className="font-medium text-gray-900 text-sm sm:text-base text-center">
                 Saved Designs
-              </span>
-            </Link>
-            <Link
-              to="/customization"
-              className="flex flex-col items-center justify-center p-3 sm:p-4 bg-yellow-50 rounded-lg hover:bg-yellow-100 transition-colors"
-            >
-              <div className="h-10 w-10 sm:h-12 sm:w-12 bg-yellow-500 rounded-full flex items-center justify-center text-white mb-2 sm:mb-3">
-                <span className="text-lg sm:text-xl">🎨</span>
-              </div>
-              <span className="font-medium text-gray-900 text-sm sm:text-base text-center">
-                Customization
               </span>
             </Link>
           </div>

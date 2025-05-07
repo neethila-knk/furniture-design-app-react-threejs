@@ -5,7 +5,7 @@ import { getFurnitureById } from '../../models/furnitureData';
 const Canvas2D = () => {
   const canvasRef = useRef(null);
   const containerRef = useRef(null);
-  const { currentDesign, selectedFurniture, setSelectedFurniture, updateFurniture } = useDesign();
+  const { currentDesign, selectedFurniture, setSelectedFurniture,removeFurniture , updateFurniture } = useDesign();
 
   const [scale, setScale] = useState(0.5);
   const [dragging, setDragging] = useState(false);
@@ -66,7 +66,7 @@ const Canvas2D = () => {
     context.strokeStyle = '#000000';
     context.lineWidth = 2;
 
-    if (['rectangle', 'square'].includes(currentDesign.room.shape)) {
+    if (['rectangle', 'rectangular', 'square'].includes(currentDesign.room.shape)) {
       context.fillRect(roomX, roomY, roomWidthPx, roomDepthPx);
       context.strokeRect(roomX, roomY, roomWidthPx, roomDepthPx);
     } else if (currentDesign.room.shape === 'l-shaped') {
@@ -254,11 +254,20 @@ const Canvas2D = () => {
 
   const handleRemoveFurniture = () => {
     if (!selectedFurniture) return;
-    const index = currentDesign.furniture.findIndex(f => f.id === selectedFurniture.id);
-    if (index !== -1 && window.confirm('Are you sure you want to remove this item?')) {
-      updateFurniture(index, null);
+  
+    const index = currentDesign.furniture.findIndex(
+      (f) => f.id === selectedFurniture.id
+    );
+  
+    if (
+      index !== -1 &&
+      window.confirm('Are you sure you want to remove this item?')
+    ) {
+      removeFurniture(index);      // ← proper delete
+      setSelectedFurniture(null);  // clear selection
     }
   };
+  
 
   const handleZoomIn = () => setScale(s => Math.min(s + 0.1, 1.5));
   const handleZoomOut = () => setScale(s => Math.max(s - 0.1, 0.2));
