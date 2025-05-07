@@ -15,24 +15,19 @@ import {
 } from '../models/designData';
 import { getFurnitureById } from '../models/furnitureData';
 
-// ────────────────────────────────────────────────────────────
-// Context setup
-// ────────────────────────────────────────────────────────────
+/* ───────────────────────────── context setup ───────────────────────────── */
 const DesignContext = createContext();
 export const useDesign = () => useContext(DesignContext);
 
-// ────────────────────────────────────────────────────────────
-// Provider
-// ────────────────────────────────────────────────────────────
+/* ───────────────────────────── provider ───────────────────────────── */
 export const DesignProvider = ({ children }) => {
-  /** Initialise sample data once */
-  useEffect(() => {
-    initializeDesigns();
-  }, []);
+  /* one‑time init */
+  useEffect(initializeDesigns, []);
 
-  /** State: active design */
+  /* state : active design */
   const [currentDesign, setCurrentDesign] = useState({
     name: 'Untitled Design',
+    createdBy: 'default-user',
     room: {
       width: 500,
       depth: 400,
@@ -44,95 +39,81 @@ export const DesignProvider = ({ children }) => {
     },
     furniture: [],
     shadingEnabled: true,
-    globalShading: 0.7,
+    globalShading: 0.3,            //  ← brighter default
     customShading: [],
+    globalTextureId: 'wood',
+    globalTextureColor: '#8B4513',
+    globalTexturePath: '/textures/wood.jpg',
+    customTextures: [],
   });
 
-  /** Keep a ref that *always* points at the very latest design */
+  /* always‑fresh ref */
   const designRef = useRef(currentDesign);
   useEffect(() => {
     designRef.current = currentDesign;
   }, [currentDesign]);
 
-  /** Other state */
+  /* other UI state */
   const [selectedFurniture, setSelectedFurniture] = useState(null);
-  const [viewMode, setViewMode] = useState('2D');
+  const [viewMode, setViewMode]                 = useState('2D');
 
-  const log = (op, data) => console.log(`[DesignContext] ${op}:`, data);
+  const log = (op, data) => console.log(`[DesignContext] ${op}`, data ?? '');
 
-  // ────────── CRUD helpers ──────────
+  /* ────────── CRUD helpers ────────── */
   const loadDesign = (designId) => {
     const d = getDesignById(designId);
-    if (!d) {
-      log('Design not found', designId);
-      return false;
-    }
-    setCurrentDesign(d);
+    if (!d) return log('Design not found', designId) || false;
+
+    /* sanity‑fill new fields */
+    if (!d.globalTextureId)    d.globalTextureId    = 'wood';
+    if (!d.globalTextureColor) d.globalTextureColor = '#8B4513';
+    if (!d.globalTexturePath)  d.globalTexturePath  = '/textures/wood.jpg';
+    if (!d.customTextures)     d.customTextures     = [];
+
+    const clean = JSON.parse(JSON.stringify(d));
+    setCurrentDesign(clean);
     setSelectedFurniture(null);
-    log('Loaded design', d);
+    designRef.current = clean;
     return true;
   };
 
   const createNewDesign = (designerId) => {
     const fresh = {
+      ...currentDesign,
+      id: undefined,
       name: 'Untitled Design',
       createdBy: designerId,
-      room: {
-        width: 500,
-        depth: 400,
-        height: 280,
-        shape: 'rectangle',
-        wallColor: '#F8F8FF',
-        floorColor: '#A9A9A9',
-        accentColor: '#4682B4',
-      },
       furniture: [],
-      shadingEnabled: true,
-      globalShading: 0.7,
+      customTextures: [],
       customShading: [],
     };
     setCurrentDesign(fresh);
     setSelectedFurniture(null);
-    log('New design created', fresh);
     return fresh;
   };
 
   const renameDesign = (newName) => {
     const t = String(newName || '').trim();
-    if (!t) {
-      log('Invalid rename', newName);
-      return false;
-    }
+    if (!t) return false;
 
-    // If the design is already saved, rename in storage.
+    /* persisted? */
     if (designRef.current.id) {
-      const updated = renameDesignInStorage(designRef.current.id, t);
-      if (!updated) {
-        log('Rename in storage failed');
-        return false;
-      }
-      setCurrentDesign(updated);
+      const upd = renameDesignInStorage(designRef.current.id, t);
+      if (!upd) return false;
+      setCurrentDesign(upd);
       return true;
     }
-
-    // Unsaved design – just update local state.
     setCurrentDesign((prev) => ({ ...prev, name: t }));
     return true;
   };
 
-  // ────────── Room & furniture helpers ──────────
-  const updateRoom = (roomProps) =>
-    setCurrentDesign((prev) => ({
-      ...prev,
-      room: { ...prev.room, ...roomProps },
-    }));
+  /* ────────── room & furniture helpers ────────── */
+  const updateRoom = (props) =>
+    setCurrentDesign((p) => ({ ...p, room: { ...p.room, ...props } }));
 
   const addFurniture = (furnitureId, pos = { x: 100, y: 100 }) => {
     const f = getFurnitureById(furnitureId);
-    if (!f) {
-      log('Furniture not found', furnitureId);
-      return false;
-    }
+    if (!f) return false;
     const item = {
       id: f.id,
       x: pos.x,
@@ -141,65 +122,118 @@ export const DesignProvider = ({ children }) => {
       color: f.defaultColor,
       scale: 1,
     };
-    setCurrentDesign((prev) => ({
-      ...prev,
-      furniture: [...prev.furniture, item],
-    }));
+    setCurrentDesign((p) => ({ ...p, furniture: [...p.furniture, item] }));
     setSelectedFurniture(item);
     return true;
   };
 
+
+  /* replace the whole furniture array at once */
+const replaceFurniture = (newArr) =>
+  setCurrentDesign((prev) => ({ ...prev, furniture: newArr }));
+
+
   const updateFurniture = (idx, props) =>
-    setCurrentDesign((prev) => {
-      const arr = [...prev.furniture];
+    setCurrentDesign((p) => {
+      const arr = [...p.furniture];
       arr[idx] = { ...arr[idx], ...props };
-      if (selectedFurniture?.id === arr[idx].id) {
-        setSelectedFurniture(arr[idx]);
-      }
-      return { ...prev, furniture: arr };
+      if (selectedFurniture?.id === arr[idx].id) setSelectedFurniture(arr[idx]);
+      return { ...p, furniture: arr };
     });
 
   const removeFurniture = (idx) =>
-    setCurrentDesign((prev) => {
-      const arr = [...prev.furniture];
+    setCurrentDesign((p) => {
+      const arr = [...p.furniture];
+      const removedId = arr[idx]?.id;
       arr.splice(idx, 1);
-      setSelectedFurniture(null);
-      return { ...prev, furniture: arr };
+      return {
+        ...p,
+        furniture: arr,
+        customShading: p.customShading.filter((c) => c.furnitureId !== removedId),
+        customTextures: p.customTextures.filter((c) => c.furnitureId !== removedId),
+      };
     });
 
-  // ────────── Shading helpers ──────────
+  /* ────────── shading helpers ────────── */
   const updateShading = (props) =>
-    setCurrentDesign((prev) => ({ ...prev, ...props }));
+    setCurrentDesign((p) => ({ ...p, ...props }));
 
   const updateCustomShading = (furnitureId, shadingLevel) =>
-    setCurrentDesign((prev) => {
-      const i = prev.customShading.findIndex(
-        (c) => c.furnitureId === furnitureId
-      );
-      const list = [...prev.customShading];
+    setCurrentDesign((p) => {
+      const i = p.customShading.findIndex((c) => c.furnitureId === furnitureId);
+      const list = [...p.customShading];
       if (i !== -1) list[i] = { furnitureId, shadingLevel };
       else list.push({ furnitureId, shadingLevel });
-      return { ...prev, customShading: list };
+      return { ...p, customShading: list };
     });
 
-  // ────────── SAVE / DELETE ──────────
-  /** Always uses the up-to-date ref; caller may pass `overrides` (e.g. `{ name }`). */
+  /* ────────── TEXTURE helpers ────────── */
+  /** 1. global: also add entry for every current item */
+  const updateGlobalTexture = (textureObj) => {
+    if (!textureObj) return;
+    setCurrentDesign((prev) => {
+      const newCustom = prev.furniture.map((it) => ({
+        furnitureId: it.id,
+        textureId:   textureObj.id,
+        texturePath: textureObj.path,
+        color:       textureObj.color,
+      }));
+      const upd = {
+        ...prev,
+        globalTextureId:    textureObj.id,
+        globalTextureColor: textureObj.color,
+        globalTexturePath:  textureObj.path,
+        customTextures:     newCustom,
+      };
+      designRef.current = upd;
+      return upd;
+    });
+  };
+
+  /** 2. per‑item; pass NULL to *remove* (reset) */
+  const updateFurnitureTexture = (furnitureId, textureObj) =>
+    setCurrentDesign((prev) => {
+      const i = prev.customTextures.findIndex((c) => c.furnitureId === furnitureId);
+      const list = [...prev.customTextures];
+
+      /* reset */
+      if (!textureObj) {
+        if (i !== -1) list.splice(i, 1);
+        return { ...prev, customTextures: list };
+      }
+
+      const entry = {
+        furnitureId,
+        textureId:   textureObj.id,
+        texturePath: textureObj.path,
+        color:       textureObj.color,
+      };
+      if (i !== -1) list[i] = entry;
+      else list.push(entry);
+      return { ...prev, customTextures: list };
+    });
+
+  /** 3. reset ALL textures */
+  const resetAllTextures = () =>
+    setCurrentDesign((prev) => ({ ...prev, customTextures: [] }));
+
+  /* ────────── SAVE / DELETE ────────── */
   const saveCurrentDesign = (designerId, overrides = {}) => {
-    const draft = {
-      ...designRef.current,
+    const latest = designRef.current;                 // always freshest snapshot
+    const draft  = {
+      ...latest,
       ...overrides,
-      createdBy:
-        designerId || designRef.current.createdBy || 'default-user',
+      createdBy: designerId || latest.createdBy || 'default-user',
     };
     if (!draft.name?.trim()) draft.name = 'Untitled Design';
-
     let saved;
-    if (draft.id) {
-      saved = updateDesign(draft.id, draft);
-    } else {
-      saved = saveDesign(draft);
+    if (draft.id) saved = updateDesign(draft.id, draft);
+    else          saved = saveDesign(draft);
+    if (saved) {
+      const clean = JSON.parse(JSON.stringify(saved));
+      setCurrentDesign(clean);
+      designRef.current = clean;
     }
-    if (saved) setCurrentDesign(saved);
     return saved;
   };
 
@@ -210,13 +244,14 @@ export const DesignProvider = ({ children }) => {
     return ok;
   };
 
-  // ────────── Context value ──────────
+  /* ────────── context value ────────── */
   const value = {
     currentDesign,
     selectedFurniture,
     viewMode,
     setSelectedFurniture,
     setViewMode,
+    /* room & furniture */
     loadDesign,
     createNewDesign,
     renameDesign,
@@ -224,16 +259,20 @@ export const DesignProvider = ({ children }) => {
     addFurniture,
     updateFurniture,
     removeFurniture,
+    /* shading & texture */
     updateShading,
     updateCustomShading,
+    updateGlobalTexture,
+    updateFurnitureTexture,
+    resetAllTextures,
+    /* persistence */
     saveCurrentDesign,
     deleteCurrentDesign,
+    replaceFurniture,
   };
 
   return (
-    <DesignContext.Provider value={value}>
-      {children}
-    </DesignContext.Provider>
+    <DesignContext.Provider value={value}>{children}</DesignContext.Provider>
   );
 };
 

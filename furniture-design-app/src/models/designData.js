@@ -211,7 +211,7 @@ export function updateDesign(designId, updatedDesign) {
       logOperation('Updating name to', updatedDesign.name);
     }
     
-    // Handle other properties
+    // Handle room properties
     if (updatedDesign.room) {
       updatedDesignObject.room = {
         ...updatedDesignObject.room,
@@ -219,10 +219,12 @@ export function updateDesign(designId, updatedDesign) {
       };
     }
     
+    // Handle furniture array
     if (updatedDesign.furniture) {
       updatedDesignObject.furniture = updatedDesign.furniture;
     }
     
+    // Handle shading properties
     if (updatedDesign.shadingEnabled !== undefined) {
       updatedDesignObject.shadingEnabled = updatedDesign.shadingEnabled;
     }
@@ -233,6 +235,24 @@ export function updateDesign(designId, updatedDesign) {
     
     if (updatedDesign.customShading) {
       updatedDesignObject.customShading = updatedDesign.customShading;
+    }
+    
+    // Handle global texture properties
+    if (updatedDesign.globalTextureId !== undefined) {
+      updatedDesignObject.globalTextureId = updatedDesign.globalTextureId;
+    }
+    
+    if (updatedDesign.globalTextureColor !== undefined) {
+      updatedDesignObject.globalTextureColor = updatedDesign.globalTextureColor;
+    }
+    
+    if (updatedDesign.globalTexturePath !== undefined) {
+      updatedDesignObject.globalTexturePath = updatedDesign.globalTexturePath;
+    }
+    
+    // Handle custom textures array
+    if (updatedDesign.customTextures) {
+      updatedDesignObject.customTextures = updatedDesign.customTextures;
     }
     
     if (updatedDesign.createdBy) {

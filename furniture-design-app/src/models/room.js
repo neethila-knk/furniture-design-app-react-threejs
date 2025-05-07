@@ -1,276 +1,237 @@
-// Room shape templates and color palettes
-export const roomShapes = [
+/* src/models/room.js
+ * Central place for room‑related constants and helpers.
+ * Includes six pre‑configured room types, colour schemes, materials, etc.
+ */
+
+/* ───────────────────────── 1. PRE‑MADE ROOM TYPES ───────────────────────── */
+/* Coordinates x / y for furniture are in centimetres measured from
+   the left and bottom walls (same convention Canvas2D and View3D use). */
+
+   export const roomTypes = [
     {
-      id: 'rectangular',
-      name: 'Rectangular',
-      description: 'A standard rectangular room',
-      dimensions: ['width', 'length', 'height']
+      id: 'kitchen',
+      name: 'Kitchen',
+      icon: '🍳',
+      /* geometric defaults */
+      shape: 'rectangular',
+      width: 350,
+      depth: 300,
+      height: 260,
+      /* colours */
+      wallColor: '#FFF8E1',
+      floorColor: '#D2B48C',
+      accentColor: '#FFB300',
+      /* starting furniture */
+      defaultFurniture: [
+        { id: 'table-1',  x: 175, y: 150 },
+        { id: 'chair-1',  x: 110, y:  90 },
+        { id: 'chair-1',  x: 240, y:  90 },
+        { id: 'cabinet-2', x: 300, y: 260 },   // counter
+      ],
     },
+  
     {
-      id: 'l-shaped',
-      name: 'L-Shaped',
-      description: 'An L-shaped room with an additional dimension',
-      dimensions: ['width', 'length', 'height', 'alcoveWidth', 'alcoveLength']
+      id: 'bedroom',
+      name: 'Bedroom',
+      icon: '🛏️',
+      shape: 'rectangular',
+      width: 420,
+      depth: 350,
+      height: 250,
+      wallColor: '#E1F5FE',
+      floorColor: '#DCEDC8',
+      accentColor: '#F06292',
+      defaultFurniture: [
+        { id: 'bed-1',    x: 210, y: 140 },
+        { id: 'cabinet-1',x:  60, y: 290 },
+      ],
     },
+  
     {
-      id: 'square',
-      name: 'Square',
-      description: 'A square room with equal width and length',
-      dimensions: ['size', 'height']
+      id: 'living-room',
+      name: 'Living Room',
+      icon: '🛋️',
+      shape: 'rectangular',
+      width: 500,
+      depth: 400,
+      height: 280,
+      wallColor: '#F5F5F5',
+      floorColor: '#D2B48C',
+      accentColor: '#FF7043',
+      defaultFurniture: [
+        { id: 'sofa-1',   x: 110, y: 100 },
+        { id: 'table-2',  x: 250, y: 120 },
+        { id: 'cabinet-2',x: 400, y: 350 },
+      ],
     },
+  
     {
-      id: 'irregular',
-      name: 'Irregular',
-      description: 'An irregular shaped room, defined by corner coordinates',
-      dimensions: ['height', 'corners']
-    }
+      id: 'office',
+      name: 'Office',
+      icon: '💻',
+      shape: 'square',
+      width: 350,
+      depth: 350,
+      height: 250,
+      wallColor: '#E0F7FA',
+      floorColor: '#607D8B',
+      accentColor: '#29B6F6',
+      defaultFurniture: [
+        { id: 'table-1',  x: 175, y: 175 },
+        { id: 'chair-2',  x: 175, y: 115 },
+        { id: 'cabinet-1',x:  60, y: 300 },
+      ],
+    },
+  
+    {
+      id: 'dining-room',
+      name: 'Dining Room',
+      icon: '🍽️',
+      shape: 'rectangular',
+      width: 450,
+      depth: 350,
+      height: 260,
+      wallColor: '#FFF8E1',
+      floorColor: '#8B4513',
+      accentColor: '#D84315',
+      defaultFurniture: [
+        { id: 'table-1',  x: 225, y: 175 },
+        { id: 'chair-1',  x: 160, y: 115 },
+        { id: 'chair-1',  x: 290, y: 115 },
+        { id: 'chair-1',  x: 160, y: 235 },
+        { id: 'chair-1',  x: 290, y: 235 },
+      ],
+    },
+  
+    {
+      id: 'guest-room',
+      name: 'Guest Room',
+      icon: '🛌',
+      shape: 'rectangular',
+      width: 400,
+      depth: 320,
+      height: 250,
+      wallColor: '#E1F5FE',
+      floorColor: '#CFD8DC',
+      accentColor: '#81C784',
+      defaultFurniture: [
+        { id: 'bed-1',    x: 200, y: 140 },
+        { id: 'cabinet-1',x: 330, y: 270 },
+      ],
+    },
   ];
   
-  // Predefined color schemes for rooms
+  /* ───────────────────────── 2. COLOUR SCHEMES ───────────────────────── */
   export const colorSchemes = [
     {
       id: 'neutral',
       name: 'Neutral',
-      description: 'Soft, neutral tones that work with any furniture',
+      description: 'Soft, neutral tones',
       colors: {
-        wall: '#F5F5F5',
-        floor: '#D2B48C',
-        ceiling: '#FFFFFF',
-        trim: '#E8E8E8'
-      }
+        wall:   '#F5F5F5',
+        floor:  '#D2B48C',
+        ceiling:'#FFFFFF',
+        trim:   '#E8E8E8',
+      },
     },
     {
       id: 'warm',
       name: 'Warm',
-      description: 'Warm, inviting colors that create a cozy atmosphere',
+      description: 'Warm, inviting colours',
       colors: {
-        wall: '#FFF8E1',
-        floor: '#8B4513',
-        ceiling: '#FFFAF0',
-        trim: '#D2B48C'
-      }
+        wall:   '#FFF8E1',
+        floor:  '#8B4513',
+        ceiling:'#FFFAF0',
+        trim:   '#D2B48C',
+      },
     },
     {
       id: 'cool',
       name: 'Cool',
-      description: 'Cool, calming colors for a serene environment',
+      description: 'Cool, calming palette',
       colors: {
-        wall: '#E0F7FA',
-        floor: '#607D8B',
-        ceiling: '#F5F5F5',
-        trim: '#B0BEC5'
-      }
+        wall:   '#E0F7FA',
+        floor:  '#607D8B',
+        ceiling:'#F5F5F5',
+        trim:   '#B0BEC5',
+      },
     },
     {
       id: 'bold',
       name: 'Bold',
-      description: 'Bold, dramatic colors for a statement room',
+      description: 'Dramatic dark palette',
       colors: {
-        wall: '#263238',
-        floor: '#212121',
-        ceiling: '#FFFFFF',
-        trim: '#CFD8DC'
-      }
+        wall:   '#263238',
+        floor:  '#212121',
+        ceiling:'#FFFFFF',
+        trim:   '#CFD8DC',
+      },
     },
     {
       id: 'pastel',
       name: 'Pastel',
-      description: 'Soft, pastel colors for a light and airy feel',
+      description: 'Light airy pastels',
       colors: {
-        wall: '#E1F5FE',
-        floor: '#DCEDC8',
-        ceiling: '#F3E5F5',
-        trim: '#FFF9C4'
-      }
-    }
+        wall:   '#E1F5FE',
+        floor:  '#DCEDC8',
+        ceiling:'#F3E5F5',
+        trim:   '#FFF9C4',
+      },
+    },
   ];
   
-  // Floor materials
+  /* ───────────────────────── 3. FLOOR & WALL MATERIALS ───────────────────────── */
   export const floorMaterials = [
-    {
-      id: 'hardwood',
-      name: 'Hardwood',
-      description: 'Classic hardwood flooring',
-      texture: '/api/placeholder/200/200',
-      defaultColor: '#8B4513'
-    },
-    {
-      id: 'carpet',
-      name: 'Carpet',
-      description: 'Soft carpet flooring',
-      texture: '/api/placeholder/200/200',
-      defaultColor: '#A9A9A9'
-    },
-    {
-      id: 'tile',
-      name: 'Tile',
-      description: 'Ceramic tile flooring',
-      texture: '/api/placeholder/200/200',
-      defaultColor: '#D3D3D3'
-    },
-    {
-      id: 'laminate',
-      name: 'Laminate',
-      description: 'Durable laminate flooring',
-      texture: '/api/placeholder/200/200',
-      defaultColor: '#DEB887'
-    },
-    {
-      id: 'concrete',
-      name: 'Concrete',
-      description: 'Modern concrete flooring',
-      texture: '/api/placeholder/200/200',
-      defaultColor: '#808080'
-    }
+    { id:'hardwood', name:'Hardwood',  texture:'/api/placeholder/200/200', defaultColor:'#8B4513' },
+    { id:'carpet',   name:'Carpet',    texture:'/api/placeholder/200/200', defaultColor:'#A9A9A9' },
+    { id:'tile',     name:'Tile',      texture:'/api/placeholder/200/200', defaultColor:'#D3D3D3' },
+    { id:'laminate', name:'Laminate',  texture:'/api/placeholder/200/200', defaultColor:'#DEB887' },
+    { id:'concrete', name:'Concrete',  texture:'/api/placeholder/200/200', defaultColor:'#808080' },
   ];
   
-  // Wall materials
   export const wallMaterials = [
-    {
-      id: 'paint',
-      name: 'Paint',
-      description: 'Standard painted walls',
-      texture: '/api/placeholder/200/200',
-      defaultColor: '#F5F5F5'
-    },
-    {
-      id: 'wallpaper',
-      name: 'Wallpaper',
-      description: 'Decorative wallpapered walls',
-      texture: '/api/placeholder/200/200',
-      defaultColor: '#FFF8DC'
-    },
-    {
-      id: 'wood-paneling',
-      name: 'Wood Paneling',
-      description: 'Wood panel walls',
-      texture: '/api/placeholder/200/200',
-      defaultColor: '#CD853F'
-    },
-    {
-      id: 'brick',
-      name: 'Brick',
-      description: 'Exposed brick walls',
-      texture: '/api/placeholder/200/200',
-      defaultColor: '#BC8F8F'
-    },
-    {
-      id: 'stone',
-      name: 'Stone',
-      description: 'Natural stone walls',
-      texture: '/api/placeholder/200/200',
-      defaultColor: '#696969'
-    }
+    { id:'paint',        name:'Paint',         texture:'/api/placeholder/200/200', defaultColor:'#F5F5F5' },
+    { id:'wallpaper',    name:'Wallpaper',     texture:'/api/placeholder/200/200', defaultColor:'#FFF8DC' },
+    { id:'wood-panel',   name:'Wood Panel',    texture:'/api/placeholder/200/200', defaultColor:'#CD853F' },
+    { id:'brick',        name:'Brick',         texture:'/api/placeholder/200/200', defaultColor:'#BC8F8F' },
+    { id:'stone',        name:'Stone',         texture:'/api/placeholder/200/200', defaultColor:'#696969' },
   ];
   
-  // Function to get a room shape by ID
-  export const getRoomShapeById = (id) => {
-    return roomShapes.find(shape => shape.id === id);
-  };
+  /* ───────────────────────── 4. SIMPLE HELPERS ───────────────────────── */
+  export const getRoomTypeById       = (id) => roomTypes.find(r => r.id === id);
+  export const getColorSchemeById    = (id) => colorSchemes.find(c => c.id === id);
+  export const getFloorMaterialById  = (id) => floorMaterials.find(m => m.id === id);
+  export const getWallMaterialById   = (id) => wallMaterials.find(m => m.id === id);
   
-  // Function to get a color scheme by ID
-  export const getColorSchemeById = (id) => {
-    return colorSchemes.find(scheme => scheme.id === id);
-  };
+  /* Create a room configuration quickly from IDs */
+  export const createRoomConfiguration = (
+    typeId,
+    colourSchemeId     = 'neutral',
+    floorMaterialId    = 'hardwood',
+    wallMaterialId     = 'paint',
+    customColors       = {}
+  ) => {
+    const t   = getRoomTypeById(typeId);
+    const col = getColorSchemeById(colourSchemeId);
+    const fl  = getFloorMaterialById(floorMaterialId);
+    const wl  = getWallMaterialById(wallMaterialId);
   
-  // Function to get a floor material by ID
-  export const getFloorMaterialById = (id) => {
-    return floorMaterials.find(material => material.id === id);
-  };
+    if (!t || !col || !fl || !wl) return null;
   
-  // Function to get a wall material by ID
-  export const getWallMaterialById = (id) => {
-    return wallMaterials.find(material => material.id === id);
-  };
-  
-  // Function to create a room configuration
-  export const createRoomConfiguration = (shapeId, dimensions, colorSchemeId, floorMaterialId, wallMaterialId, customColors = {}) => {
-    const shape = getRoomShapeById(shapeId);
-    const colorScheme = getColorSchemeById(colorSchemeId);
-    const floorMaterial = getFloorMaterialById(floorMaterialId);
-    const wallMaterial = getWallMaterialById(wallMaterialId);
-    
-    if (!shape || !colorScheme || !floorMaterial || !wallMaterial) {
-      return null;
-    }
-    
     return {
-      shape: shapeId,
-      dimensions,
-      colorScheme: colorSchemeId,
+      ...t,
+      colorScheme: colourSchemeId,
       floorMaterial: floorMaterialId,
       wallMaterial: wallMaterialId,
-      colors: {
-        ...colorScheme.colors,
-        ...customColors
-      }
+      colors: { ...col.colors, ...customColors },
     };
   };
   
-  // Default room configurations
-  export const defaultRoomConfigurations = [
-    {
-      id: 'living-room',
-      name: 'Living Room',
-      shape: 'rectangular',
-      dimensions: {
-        width: 5,
-        length: 7,
-        height: 2.8
-      },
-      colorScheme: 'neutral',
-      floorMaterial: 'hardwood',
-      wallMaterial: 'paint'
-    },
-    {
-      id: 'dining-room',
-      name: 'Dining Room',
-      shape: 'rectangular',
-      dimensions: {
-        width: 4,
-        length: 5,
-        height: 2.5
-      },
-      colorScheme: 'warm',
-      floorMaterial: 'hardwood',
-      wallMaterial: 'paint'
-    },
-    {
-      id: 'bedroom',
-      name: 'Bedroom',
-      shape: 'rectangular',
-      dimensions: {
-        width: 4,
-        length: 5,
-        height: 2.4
-      },
-      colorScheme: 'pastel',
-      floorMaterial: 'carpet',
-      wallMaterial: 'paint'
-    },
-    {
-      id: 'office',
-      name: 'Home Office',
-      shape: 'square',
-      dimensions: {
-        size: 3.5,
-        height: 2.4
-      },
-      colorScheme: 'cool',
-      floorMaterial: 'hardwood',
-      wallMaterial: 'paint'
-    }
-  ];
-  
-  // Function to get a default room configuration by ID
-  export const getDefaultRoomConfigurationById = (id) => {
-    return defaultRoomConfigurations.find(config => config.id === id);
-  };
-  
+  /* ───────────────────────── default export (optional) ───────────────────────── */
   export default {
-    roomShapes,
+    roomTypes,
     colorSchemes,
     floorMaterials,
     wallMaterials,
-    defaultRoomConfigurations
   };
+  
