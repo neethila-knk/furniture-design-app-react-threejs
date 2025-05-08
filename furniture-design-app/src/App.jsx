@@ -15,15 +15,16 @@ import RoomSetup from './components/Room/RoomSetup';
 import FurnitureLibrary from './components/Furniture/FurnitureLibrary';
 import DesignCreator from './components/Design/DesignCreator';
 import SavedDesigns from './components/Management/SavedDesigns';
+import FurnitureShowcase from './components/Home/FurnitureShowcase';
 
 // Utility component for protected routes for all authenticated users
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated } = useAuth();
-  
+
   if (!isAuthenticated) {
     return <Navigate to="/login" />;
   }
-  
+
   return (
     <div className="flex h-screen overflow-hidden">
       <Sidebar />
@@ -40,11 +41,11 @@ const ProtectedRoute = ({ children }) => {
 // Route check for initial path
 const InitialRoute = () => {
   const { isAuthenticated, isAdmin } = useAuth();
-  
+
   if (!isAuthenticated) {
     return <Navigate to="/login" />;
   }
-  
+
   if (isAdmin) {
     return <Navigate to="/dashboard" />;
   } else {
@@ -61,24 +62,24 @@ function App() {
       console.error('Error initializing designs:', error);
     }
   }, []);
-  
+
   return (
     <BrowserRouter>
       <AuthProvider>
         <DesignProvider>
           <Routes>
             <Route path="/login" element={<Login />} />
-            
+
             <Route
               path="/home"
               element={<Home />}
             />
-            
+
             <Route
               path="/"
               element={<InitialRoute />}
             />
-            
+
             <Route
               path="/dashboard"
               element={
@@ -87,7 +88,7 @@ function App() {
                 </ProtectedRoute>
               }
             />
-            
+
             <Route
               path="/room-setup"
               element={
@@ -96,7 +97,7 @@ function App() {
                 </ProtectedRoute>
               }
             />
-            
+
             <Route
               path="/furniture-library"
               element={
@@ -105,7 +106,7 @@ function App() {
                 </ProtectedRoute>
               }
             />
-            
+
             <Route
               path="/design-view"
               element={
@@ -114,7 +115,12 @@ function App() {
                 </ProtectedRoute>
               }
             />
-            
+
+            <Route
+              path="/furniture-showcase"
+              element={<FurnitureShowcase />}
+            />
+
             <Route
               path="/saved-designs"
               element={
@@ -123,7 +129,7 @@ function App() {
                 </ProtectedRoute>
               }
             />
-            
+
             <Route path="*" element={<Navigate to="/login" />} />
           </Routes>
         </DesignProvider>
