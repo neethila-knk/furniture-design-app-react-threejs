@@ -427,8 +427,7 @@ const CustomizationPanel = ({
 
       {!selectedFurniture && activeTab !== 'textures' && (
         <div className="mt-4 p-3 bg-blue-50 rounded border border-blue-100 text-sm text-blue-700">
-          Select a furniture item to customize its scale, rotation, and
-          material.
+          Change room wall color and floor color
         </div>
       )}
 

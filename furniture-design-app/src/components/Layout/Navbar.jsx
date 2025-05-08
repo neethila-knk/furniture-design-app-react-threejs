@@ -1,12 +1,14 @@
+// src/components/Layout/Navbar.jsx
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { useDesign } from '../../contexts/DesignContext';
 
 const Navbar = () => {
-  const { currentUser, logout } = useAuth();
+  const { currentUser, logout, isAdmin } = useAuth();
   const { currentDesign, saveCurrentDesign, viewMode, setViewMode } = useDesign();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const navigate = useNavigate();
 
   const handleSave = () => {
     if (currentUser) {
@@ -23,6 +25,11 @@ const Navbar = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
+  };
+
   return (
     <nav className="bg-gray-900 text-white shadow-lg">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -31,6 +38,13 @@ const Navbar = () => {
             <Link to="/dashboard" className="flex-shrink-0 flex items-center">
               <span className="text-xl font-bold">Interior Design Studio</span>
             </Link>
+            <div className="hidden md:flex ml-6 space-x-4">
+              {!isAdmin && (
+                <Link to="/home" className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">
+                  Home
+                </Link>
+              )}
+            </div>
           </div>
 
           {/* Mobile menu button */}
@@ -57,7 +71,7 @@ const Navbar = () => {
           {currentUser && (
             <div className="hidden md:flex items-center space-x-4">
               <span className="text-sm font-medium">
-                Design: {currentDesign.name}
+                Design: {currentDesign?.name || 'New Design'}
               </span>
 
               <button
@@ -78,8 +92,11 @@ const Navbar = () => {
                 <span className="mr-2 text-sm font-medium">
                   {currentUser.name}
                 </span>
+                <span className="bg-blue-600 text-xs font-semibold px-2 py-1 rounded-full mr-2">
+                  {currentUser.role === 'admin' ? 'Admin' : 'User'}
+                </span>
                 <button
-                  onClick={logout}
+                  onClick={handleLogout}
                   className="bg-red-600 hover:bg-red-500 text-white px-3 py-1 rounded text-sm font-medium"
                 >
                   Logout
@@ -94,8 +111,14 @@ const Navbar = () => {
       {currentUser && (
         <div className={`${isMenuOpen ? 'block' : 'hidden'} md:hidden`}>
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 border-t border-gray-700">
+            {!isAdmin && (
+              <Link to="/home" className="block px-3 py-2 text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700 rounded-md">
+                Home
+              </Link>
+            )}
+            
             <div className="px-3 py-2 text-sm font-medium">
-              Design: {currentDesign.name}
+              Design: {currentDesign?.name || 'New Design'}
             </div>
             
             <button
@@ -113,11 +136,16 @@ const Navbar = () => {
             </button>
             
             <div className="px-3 py-2 flex justify-between items-center">
-              <span className="text-sm font-medium">
-                {currentUser.name}
-              </span>
+              <div>
+                <span className="text-sm font-medium block">
+                  {currentUser.name}
+                </span>
+                <span className="bg-blue-600 text-xs font-semibold px-2 py-1 rounded-full">
+                  {currentUser.role === 'admin' ? 'Admin' : 'User'}
+                </span>
+              </div>
               <button
-                onClick={logout}
+                onClick={handleLogout}
                 className="bg-red-600 hover:bg-red-500 text-white px-3 py-1 rounded text-sm font-medium"
               >
                 Logout
