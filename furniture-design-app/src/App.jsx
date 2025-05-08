@@ -1,3 +1,4 @@
+// src/App.jsx
 import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
@@ -6,6 +7,7 @@ import { initializeDesigns } from './models/designData';
 
 // Components
 import Login from './components/Auth/Login';
+import Home from './components/Home/Home';
 import Navbar from './components/Layout/Navbar';
 import Sidebar from './components/Layout/Sidebar';
 import Dashboard from './components/Dashboard/Dashboard';
@@ -14,8 +16,7 @@ import FurnitureLibrary from './components/Furniture/FurnitureLibrary';
 import DesignCreator from './components/Design/DesignCreator';
 import SavedDesigns from './components/Management/SavedDesigns';
 
-
-// Utility component for protected routes
+// Utility component for protected routes for all authenticated users
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated } = useAuth();
   
@@ -36,11 +37,26 @@ const ProtectedRoute = ({ children }) => {
   );
 };
 
+// Route check for initial path
+const InitialRoute = () => {
+  const { isAuthenticated, isAdmin } = useAuth();
+  
+  if (!isAuthenticated) {
+    return <Navigate to="/login" />;
+  }
+  
+  if (isAdmin) {
+    return <Navigate to="/dashboard" />;
+  } else {
+    return <Navigate to="/home" />;
+  }
+};
+
 function App() {
   // Initialize the design data in localStorage
   React.useEffect(() => {
     try {
-      initializeDesigns();  // ✅ directly call
+      initializeDesigns();
     } catch (error) {
       console.error('Error initializing designs:', error);
     }
@@ -54,12 +70,13 @@ function App() {
             <Route path="/login" element={<Login />} />
             
             <Route
+              path="/home"
+              element={<Home />}
+            />
+            
+            <Route
               path="/"
-              element={
-                <ProtectedRoute>
-                  <Dashboard />
-                </ProtectedRoute>
-              }
+              element={<InitialRoute />}
             />
             
             <Route
@@ -97,7 +114,6 @@ function App() {
                 </ProtectedRoute>
               }
             />
-           
             
             <Route
               path="/saved-designs"
@@ -108,7 +124,7 @@ function App() {
               }
             />
             
-            <Route path="*" element={<Navigate to="/dashboard" />} />
+            <Route path="*" element={<Navigate to="/login" />} />
           </Routes>
         </DesignProvider>
       </AuthProvider>

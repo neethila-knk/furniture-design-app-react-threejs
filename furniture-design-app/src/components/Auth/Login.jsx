@@ -1,3 +1,4 @@
+// src/components/Auth/Login.jsx
 import React, { useState } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
@@ -17,9 +18,14 @@ const Login = () => {
     setLoading(true);
 
     try {
-      const success = login(username, password);
-      if (success) {
-        navigate('/dashboard');
+      const user = login(username, password);
+      if (user) {
+        // Redirect based on user role
+        if (user.role === 'admin') {
+          navigate('/dashboard');
+        } else {
+          navigate('/home');
+        }
       } else {
         setError('Invalid username or password');
       }
@@ -52,7 +58,7 @@ const Login = () => {
       <div className="relative z-20 bg-gray-800 bg-opacity-90 p-8 rounded-lg shadow-lg w-full max-w-md">
         <div className="text-center mb-8">
           <h2 className="text-3xl font-bold text-white">Interior Design Studio</h2>
-          <p className="text-gray-300 mt-2">Sign in to your designer account</p>
+          <p className="text-gray-300 mt-2">Sign in to your account</p>
         </div>
 
         {error && (
@@ -103,7 +109,13 @@ const Login = () => {
 
         <div className="mt-6 text-center">
           <p className="text-sm text-gray-400">
-            Demo account: username: <span className="font-semibold">demo</span> / password: <span className="font-semibold">demo</span>
+            Demo accounts:
+          </p>
+          <p className="text-sm text-gray-400">
+            Admin: <span className="font-semibold">admin</span> / <span className="font-semibold">admin123</span>
+          </p>
+          <p className="text-sm text-gray-400">
+            User: <span className="font-semibold">user</span> / <span className="font-semibold">user123</span>
           </p>
         </div>
       </div>

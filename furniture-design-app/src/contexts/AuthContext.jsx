@@ -1,3 +1,4 @@
+// src/contexts/AuthContext.jsx
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import { authenticateUser } from '../models/userData';
 
@@ -25,7 +26,7 @@ export const AuthProvider = ({ children }) => {
     if (user) {
       setCurrentUser(user);
       sessionStorage.setItem('user', JSON.stringify(user));
-      return true;
+      return user; // Return the user object instead of just a boolean
     }
     return false;
   };
@@ -40,7 +41,8 @@ export const AuthProvider = ({ children }) => {
     currentUser,
     login,
     logout,
-    isAuthenticated: !!currentUser
+    isAuthenticated: !!currentUser,
+    isAdmin: currentUser?.role === 'admin'
   };
 
   return (
