@@ -1,10 +1,6 @@
-# furniture-design-app-react-threejs
-A React + Three.js application for designing customizable room layouts with 2D and 3D furniture visualization.
 # Furniture Design & Visualization Application
 
 A web-based application for furniture design visualization that enables interior designers to create, customize, and visualize room layouts in both 2D and 3D views.
-
-![Furniture Design App](https://via.placeholder.com/800x400?text=Furniture+Design+App)
 
 ## 🌟 Features
 
@@ -65,16 +61,6 @@ http://localhost:5173
 - Access saved designs from the dashboard
 - Open, edit, or delete existing designs
 
-## 🌳 Project Structure
-
-
-## 👥 Contributors
-
-- Kerawala Sagara - State Management & Data Persistence
-- Kumarage Kumararatne - 3D Visualization Engineer
-- Thennakoon M Thennakoon - Frontend Developer
-- Withanage Karunachandra - 2D Canvas Developer
-- Thinal Liyanage - Project Lead
 
 ## 🔍 Demo
 
