@@ -75,7 +75,6 @@ http://localhost:5173
 ## 🔍 Demo
 
 - Live demo: [YouTube Presentation](https://youtu.be/Rxf8_zEzFoo)
-- Interactive demo: [Try the App](https://furniture-design-app.example.com)
 - GitHub repository: [Source Code](https://github.com/neethila-knk/furniture-design-app-react-threejs.git)
 
 ## 📄 License
