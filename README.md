@@ -13,8 +13,6 @@ A comprehensive web-based application for furniture design visualization that em
 - **Customization Options**: Change colors, textures, materials, and shading in real-time
 - **Save & Load**: Persist designs for later use with cloud synchronization
 - **User Authentication**: Secure access for designers with role-based permissions
-- **Export Capabilities**: Export designs as images, PDFs, or 3D models for client presentations
-- **Collaboration Tools**: Share designs with clients or team members for feedback
 - **Material Library**: Apply various textures and materials to furniture and room surfaces
 
 ## 🛠️ Technology Stack
@@ -26,8 +24,6 @@ A comprehensive web-based application for furniture design visualization that em
 - **3D Models**: GLB format for optimized loading and performance
 - **Environment Maps**: HDR images for physically-based realistic lighting
 - **Storage**: LocalStorage API for client-side persistence, Firebase for cloud storage
-- **Authentication**: JWT-based auth flow with secure token management
-- **Deployment**: Containerized with Docker, deployable to any cloud provider
 
 ## 🚀 Installation
 
@@ -57,7 +53,6 @@ http://localhost:5173
 ### Authentication
 - Use the login screen to access the application
 - Demo credentials are provided on the login page
-- Register new accounts with email verification
 
 ### Creating a New Design
 1. Navigate to the dashboard and select "Create New Design."
@@ -69,13 +64,6 @@ http://localhost:5173
 7. Customize colors, textures, and materials from the materials panel
 8. Adjust lighting conditions and environment settings for different times of day
 9. Save your design with a name and optional description
-
-### Managing Designs
-- Access saved designs from the dashboard with thumbnail previews
-- Filter and sort designs by name, date, or custom tags
-- Open, edit, duplicate, or delete existing designs
-- Export designs in various formats for client presentations
-- Share designs via unique URLs with optional password protection
 
 ## 💻 System Requirements
 
@@ -100,3 +88,7 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 - HDR environment maps from [Polyhaven](https://polyhaven.com)
 - Icons provided by [Heroicons](https://heroicons.com) and [Font Awesome](https://fontawesome.com)
 - UI components inspired by [Tailwind UI](https://tailwindui.com)
+
+---
+
+*Developed as part of BSc (Hons) Software Engineering at Plymouth University, UK.*
